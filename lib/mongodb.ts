@@ -1,40 +1,19 @@
-import { MongoClient, ServerApiVersion } from "mongodb";
-const uri = ""
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
+import mongoose from "mongoose";
+
+export default async function connectDB() {
+  
+  if (mongoose.connection.readyState >= 1) return;
+
+  const uri = "mongodb://localhost:27017/";
+  if (!uri) {
+    console.error("❌ MONGO_URI is missing in .env");
+    throw new Error("MONGO_URI not found in environment variables");
   }
-});
 
+  await mongoose.connect(uri, {
+    dbName: "mydatabase",
+  });
 
-async function run() {
-  try {
-    await client.connect();
-    console.log("Connected to MongoDB");
+  console.log("✅ MongoDB Connected");
 
-    // Ping the admin database just to check connection
-    await client.db("hello").command({ ping: 1 });
-    console.log("Ping successful!");
-
-    // Get your actual working database
-    const db = client.db("myDatabaseName"); 
-    const collection = db.collection("myCollection");
-
-    // const result = await collection.insertOne({
-    //   name: "theGreatSanchit",
-    //   age: 21,
-    //   city: "Africa",
-    // });
-
-    console.log("Insert result:", result);
-  } catch (err) {
-    console.error("Error:", err);
-  } finally {
-    // optional to close
-    // await client.close();
-  }
 }
-
-run().catch(console.dir);
