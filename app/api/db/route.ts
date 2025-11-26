@@ -50,8 +50,10 @@ export async function POST(req: Request) {
     );
   } catch (error) {
     console.error("POST /api/db error:", error);
+    const message =
+        error instanceof Error ? error.message : "Unknown error occurred";
     return NextResponse.json(
-      { error: "Internal server error", details: error.message },
+      { error: "Internal server error", details: message },
       { status: 500 }
     );
   }
