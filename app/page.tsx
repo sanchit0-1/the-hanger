@@ -1,8 +1,14 @@
 "use client"
-import dbconnect from "@/lib/mongodb"
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
 
 export default function Page(){
-  // useEffect(() => { dbconnect(); }, []);
+  const route = useRouter();
+  useEffect(() => {   route.push('/login')
+ }, []);
+  const mongodb = process.env.MONGODB_URI;
+  console.log(mongodb)
   return(<>
     <h2>
       hello sanchit!
